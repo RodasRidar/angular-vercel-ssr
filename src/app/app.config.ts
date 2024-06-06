@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     provideHttpClient(withInterceptorsFromDi(),withFetch()),
     provideClientHydration(),
-    ClientResolver,
+    // ClientResolver,
     {
       provide: SUBDOMAIN,
       useValue: '',

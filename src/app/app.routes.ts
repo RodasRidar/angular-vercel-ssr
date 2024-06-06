@@ -19,17 +19,17 @@ export const routes: Routes = [
         path: '',
         component: HomeComponent,
         title: 'Inicio',
-        resolve: {
-          businessSlug: ClientResolver,
-        }
+        // resolve: {
+        //   businessSlug: ClientResolver,
+        // }
       },
       {
         path: 'inicio',
         component: HomeComponent,
         title: 'Inicio',        
-        resolve: {
-          businessSlug: ClientResolver,
-        }
+        // resolve: {
+        //   businessSlug: ClientResolver,
+        // }
       },
       // {
       //   path: 'productos',

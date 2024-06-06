@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Component, Inject, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { forkJoin, mergeMap, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FooterComponent } from '../../components/footer/footer.component';
@@ -14,6 +14,7 @@ import { SystemConfiguration } from '../../model/system-configuration.interface'
 import { ClientService } from '../../services/client.service';
 import { SystemConfigurationService } from '../../services/system-configuration.service';
 import { SeoService } from '../../services/seo.service';
+import { SUBDOMAIN } from '../../../subdomain.token';
 
 @Component({
   selector: 'app-home',
@@ -69,35 +70,43 @@ export class HomeComponent implements OnInit {
 
   imagePortrait = signal<string>('');
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private route: ActivatedRoute,) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private route: ActivatedRoute,@Inject(SUBDOMAIN) private subdomain: string) {
     console.log(this.businessSlug);
+    if (isPlatformServer(this.platformId)) {
+      this.businessSlug = this.subdomain;
+    }
+    else {
+      this.businessSlug = window.location.hostname.split('.')[0];
+    }
   }
-
+  
   ngOnInit(): void {
 
     this.businessSlug = this.route.snapshot.data["businessSlug"];
 
-    forkJoin([this.getClientAndLocations(), this.getSystemConfigAndMenu()]).subscribe(
-      ([clientAndLocations, systemConfig]) => {
-        const [products, client, locations] = clientAndLocations;
-
-        // console.log(products);
-
-        this.clientSignal.set(client[0]);
-        // console.log(client);
-
-        this.imagePortrait.set(locations[0].imagePortrait ?? '');
-        // console.log(locations);
-
-        this.lstProductsOnHomePage = products;
-
-        // Finaliza el estado de loading
-        this.isLoading.set(false);
-      },
-      error => {
-        console.error('Error en una de las peticiones', error);
-        this.isLoading.set(false);
-      });
+    if(isPlatformServer(this.platformId)){
+      forkJoin([this.getClientAndLocations(), this.getSystemConfigAndMenu()]).subscribe(
+        ([clientAndLocations, systemConfig]) => {
+          const [products, client, locations] = clientAndLocations;
+  
+          // console.log(products);
+  
+          this.clientSignal.set(client[0]);
+          // console.log(client);
+  
+          this.imagePortrait.set(locations[0].imagePortrait ?? '');
+          // console.log(locations);
+  
+          this.lstProductsOnHomePage = products;
+  
+          // Finaliza el estado de loading
+          this.isLoading.set(false);
+        },
+        error => {
+          console.error('Error en una de las peticiones', error);
+          this.isLoading.set(false);
+        });
+    }
 
     this.seo.title.setTitle(this.clientSignal().companyName ?? '');
     this.seo.meta.updateTag({ name: "description", content: `Estamos probando SSR, esta una pagina de ${this.businessSlug}` });
