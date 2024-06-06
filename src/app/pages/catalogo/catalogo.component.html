@@ -1,0 +1,332 @@
+<!-- MOVILE -->
+<div class="bg-white flex flex-col container mx-auto sm:hidden">
+  <app-portrait
+    [restaurantName]="restaurantName"
+    [restaurantPortrait]="restaurantPortrait" />
+  <!-- Nombre del local y opciones  -->
+  <section class="flex max-w-fit items-start justify-between mt-5 px-5">
+    <h1 class="text-black text-2xl font-bold self-center w-[252px] my-auto">
+      {{ restaurantName }} - {{ sucursal }}
+    </h1>
+    <button type="button" class="ml-5 p-2">
+      <img
+        height="20"
+        width="20"
+        src="./assets/icons/icon_info.svg"
+        alt="info"
+        class="aspect-square object-center overflow-hidden" />
+    </button>
+    <button type="button" class="p-2">
+      <img
+        height="20"
+        width="20"
+        src="./assets/icons/icon_share.svg"
+        alt="share"
+        class="aspect-square object-center overflow-hidden" />
+    </button>
+  </section>
+  <!-- Calificacion y Opiniones -->
+  <section class="flex w-fit items-start gap-1.5 ml-10 mt-5 px-5 max-md:ml-2.5">
+    <img
+      height="12"
+      width="12"
+      ngSrc="./assets/icons/icon_star.svg"
+      class="my-auto"
+      alt="star" />
+    <div class="text-black text-xs self-center">
+      {{ reviewPoints }} ({{ reviews }})
+    </div>
+    <div class="text-black text-xs underline ml-2">
+      <a href="#" target="_blank">Leer Opiniones</a>
+    </div>
+  </section>
+  <!-- Nuestra Carta -->
+
+  <section class="flex max-w-full items-center gap-1.5 mt-5 px-5">
+    <img src="./assets/icons/icon_menu.svg" alt="menu" />
+    <h2 class="text-black text-xl font-medium">Nuestra Carta</h2>
+  </section>
+  <div #fixedElement [ngClass]="cartaClass" class="bg-white">
+    <div class="relative overflow-auto py-4">
+      <ul class="flex flex-nowrap text-center gap-2 w-max px-5">
+        <li>
+          <app-item-menu [isSelected]="true" name="Entradas" />
+        </li>
+        <li>
+          <app-item-menu [isSelected]="false" name="Parrillas" />
+        </li>
+        <li>
+          <app-item-menu [isSelected]="false" name="Descuentos" />
+        </li>
+        <li>
+          <app-item-menu [isSelected]="false" name="Bebidas" />
+        </li>
+        <li>
+          <app-item-menu [isSelected]="false" name="Menú" />
+        </li>
+        <li>
+          <app-item-menu [isSelected]="false" name="Más Vendidos" />
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Carta Container -->
+  <div class="block gap-2" [ngClass]="cartaMargine">
+    <!-- <app-item-product [item]="dishItem"></app-item-product>
+    <app-item-product [item]="dishItem"></app-item-product>
+    <app-item-product [item]="dishItem"></app-item-product>
+    <app-item-product [item]="dishItem"></app-item-product>
+    <app-item-product [item]="dishItem"></app-item-product>
+    <app-item-product [item]="dishItem"></app-item-product>
+    <app-item-product [item]="dishItem"></app-item-product>
+    <app-item-product [item]="dishItem"></app-item-product>
+    <app-item-product [item]="dishItem"></app-item-product>
+    <app-item-product [item]="dishItem"></app-item-product> -->
+  </div>
+</div>
+
+<!-- DESKTOP -->
+<div class="max-sm:hidden">
+  <app-navbar
+    [businessName]="clientSignal().companyName ?? ''"
+    [BusinessColor]="systemConfig().businessColor"
+    [lstMenu]="lstMenu()"
+    [isLoading]="isLoading()" />
+
+  <div class="bg-white flex flex-col">
+    <!-- MENU DE SECCION -->
+    @if(isLoading()){
+    <div
+      class="bg-white items-center justify-center sticky top-[82px] w-full pt-5 pb-5">
+      <div
+        class="relative scrollbar-container overflow-hidden hover:overflow-auto py-4">
+        <ul class="flex flex-nowrap text-center gap-2 w-max px-5">
+          <li>
+            <div
+              class="h-6 self-center bg-gray-200 rounded-full dark:bg-gray-700 w-24 animate-pulse"></div>
+          </li>
+          <li>
+            <div
+              class="h-6 self-center bg-gray-200 rounded-full dark:bg-gray-700 w-32 animate-pulse"></div>
+          </li>
+          <li>
+            <div
+              class="h-6 self-center bg-gray-200 rounded-full dark:bg-gray-700 w-24 animate-pulse"></div>
+          </li>
+          <li>
+            <div
+              class="h-6 self-center bg-gray-200 rounded-full dark:bg-gray-700 w-20 animate-pulse"></div>
+          </li>
+          <li>
+            <div
+              class="h-6 self-center bg-gray-200 rounded-full dark:bg-gray-700 w-32 animate-pulse"></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    } @else{
+    <div
+      class="bg-white items-center justify-center sticky top-[82px] w-full pt-5 pb-5">
+      <div
+        class="relative scrollbar-container overflow-hidden hover:overflow-auto py-4">
+        <ul
+          class="flex flex-nowrap text-center gap-2 w-max px-5"
+          id="default-tab"
+          data-tabs-toggle="#default-tab-content"
+          role="tablist">
+          <li role="presentation">
+            <!-- <app-item-menu
+              [isSelected]="true"
+              name="Entradas"
+              id="Entradas-tap"
+              data-tabs-target="#Entradas"
+              type="button"
+              role="tab"
+              aria-controls="Entradas"
+              aria-selected="false" /> -->
+            <button
+              class="font-semibold text-sm flex-1 px-[10px] py-[7px] rounded-2xl w-fit"
+              id="entradas-tap"
+              data-tabs-target="#entradas"
+              type="button"
+              role="tab"
+              aria-controls="entradas"
+              aria-selected="false">
+              hola
+            </button>
+          </li>
+          <li role="presentation">
+            <app-item-menu
+              [isSelected]="false"
+              name="Parrillas"
+              id="Parrillas-tap"
+              data-tabs-target="#Parrillas"
+              role="tab"
+              aria-controls="Parrillas"
+              aria-selected="false" />
+          </li>
+          <li role="presentation">
+            <app-item-menu
+              [isSelected]="false"
+              name="Descuentos"
+              id="Descuentos-tap"
+              data-tabs-target="#Descuentos"
+              role="tab"
+              aria-controls="Descuentos"
+              aria-selected="Descuentos" />
+          </li>
+        </ul>
+      </div>
+    </div>
+    }
+    <!-- LOS PRODUCTOS -->
+    <div class="container mx-auto flex max-w-[940px] flex-col items-stretch">
+      <div class="grid grid-cols-1 md:grid-cols-2">
+        @if(isLoading()){
+        <app-item-product class="h-auto max-w-full" [isLoading]="true" />
+        <app-item-product class="h-auto max-w-full" [isLoading]="true" />
+        <app-item-product class="h-auto max-w-full" [isLoading]="true" />
+        <app-item-product class="h-auto max-w-full" [isLoading]="true" />
+        }@else { @for (item of lstCatalog(); track item.id) {
+        <div id="default-tab-content">
+          <app-item-product
+            id="entradas"
+            [product]="product"
+            role="tabpanel"
+            aria-labelledby="entradas-tab" />
+          <app-item-product
+            class="h-auto max-w-full"
+            [isLoading]="isLoading()"
+            [product]="product"
+            id="Parrillas"
+            role="tabpanel"
+            aria-labelledby="Parrillas-tab" />
+          <app-item-product
+            class="h-auto max-w-full"
+            [isLoading]="isLoading()"
+            [product]="product"
+            id="Descuentos"
+            role="tabpanel"
+            aria-labelledby="Descuentos-tab" />
+        </div>
+        } }
+      </div>
+    </div>
+
+    <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+      <ul
+        class="flex flex-wrap -mb-px text-sm font-medium text-center"
+        id="default-tab"
+        data-tabs-toggle="#default-tab-content"
+        role="tablist">
+        <li class="me-2" role="presentation">
+          <button
+            class="inline-block p-4 border-b-2 rounded-t-lg"
+            id="profile-tab"
+            data-tabs-target="#profile"
+            type="button"
+            role="tab"
+            aria-controls="profile"
+            aria-selected="false">
+            Profile
+          </button>
+        </li>
+        <li class="me-2" role="presentation">
+          <button
+            class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+            id="dashboard-tab"
+            data-tabs-target="#dashboard"
+            type="button"
+            role="tab"
+            aria-controls="dashboard"
+            aria-selected="false">
+            Dashboard
+          </button>
+        </li>
+        <li class="me-2" role="presentation">
+          <button
+            class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+            id="settings-tab"
+            data-tabs-target="#settings"
+            type="button"
+            role="tab"
+            aria-controls="settings"
+            aria-selected="false">
+            Settings
+          </button>
+        </li>
+        <li role="presentation">
+          <button
+            class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+            id="contacts-tab"
+            data-tabs-target="#contacts"
+            type="button"
+            role="tab"
+            aria-controls="contacts"
+            aria-selected="false">
+            Contacts
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div id="default-tab-content">
+      <div
+        class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+        id="profile"
+        role="tabpanel"
+        aria-labelledby="profile-tab">
+        <app-item-product
+          id="entradas"
+          [product]="product"
+          [isLoading]="false"
+          role="tabpanel"
+          aria-labelledby="entradas-tab" />
+      </div>
+      <div
+        class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+        id="dashboard"
+        role="tabpanel"
+        aria-labelledby="dashboard-tab">
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          This is some placeholder content the
+          <strong class="font-medium text-gray-800 dark:text-white"
+            >Dashboard tab's associated content</strong
+          >. Clicking another tab will toggle the visibility of this one for the
+          next. The tab JavaScript swaps classes to control the content
+          visibility and styling.
+        </p>
+      </div>
+      <div
+        class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+        id="settings"
+        role="tabpanel"
+        aria-labelledby="settings-tab">
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          This is some placeholder content the
+          <strong class="font-medium text-gray-800 dark:text-white"
+            >Settings tab's associated content</strong
+          >. Clicking another tab will toggle the visibility of this one for the
+          next. The tab JavaScript swaps classes to control the content
+          visibility and styling.
+        </p>
+      </div>
+      <div
+        class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+        id="contacts"
+        role="tabpanel"
+        aria-labelledby="contacts-tab">
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          This is some placeholder content the
+          <strong class="font-medium text-gray-800 dark:text-white"
+            >Contacts tab's associated content</strong
+          >. Clicking another tab will toggle the visibility of this one for the
+          next. The tab JavaScript swaps classes to control the content
+          visibility and styling.
+        </p>
+      </div>
+    </div>
+
+    <app-footer></app-footer>
+  </div>
+</div>

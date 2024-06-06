@@ -1,0 +1,37 @@
+<!-- eslint-disable prettier/prettier -->
+<!-- <body class="max-sm:container mx-auto w-[540px] self-center"> -->
+<app-navbar [businessName]="clientSignal().companyName ?? ''" [BusinessColor]="systemConfig().businessColor"
+  [lstMenu]="lstMenu()" [isLoading]="isLoading()" />
+
+<div class="bg-white flex flex-col h-[120wh]">
+  <app-home-banner [BackgroundImageClass]="BackgroundImageClass" [businessPortrait]="imagePortrait() || ''"
+    [isLoading]="isLoading()" />
+  <div class="container mx-auto flex max-w-[940px] flex-col items-stretch mt-5">
+    @if(isLoading()){
+
+    <div class="h-5 bg-gray-200 rounded-full dark:bg-gray-700 w-40 mb-4  animate-pulse"></div>
+
+    <div class="mt-5 grid grid-cols-1 md:grid-cols-2">
+
+      <app-item-product class="h-auto max-w-full" [isLoading]="true" />
+      <app-item-product class="h-auto max-w-full" [isLoading]="true" />
+      <app-item-product class="h-auto max-w-full" [isLoading]="true" />
+      <app-item-product class="h-auto max-w-full" [isLoading]="true" />
+
+    </div>
+    }@else{
+    <h1 class="text-black items-start text-xl font-semibold whitespace-nowrap ml-2">
+      {{ systemConfig().homeTitle }}
+    </h1>
+
+    <div class="mt-5 grid grid-cols-1 md:grid-cols-2">
+      @for (item of lstProductsOnHomePage; track item.id) {
+      <app-item-product [product]="item" class="h-auto max-w-full" [isLoading]="false" />
+      }
+    </div>
+    }
+
+  </div>
+</div>
+
+<app-footer></app-footer>

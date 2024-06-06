@@ -1,22 +1,23 @@
-import { APP_INITIALIZER, ApplicationConfig } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { ApplicationConfig } from '@angular/core';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
-import { DataService, DataServiceBrowser } from './data.service';
+import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import { TokenInterceptor } from './interceptors/token.interceptor';
+import { ClientResolver } from './services/client.resolver';
+import { SUBDOMAIN } from '../subdomain.token';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    provideHttpClient(withInterceptorsFromDi(),withFetch()),
     provideClientHydration(),
+    ClientResolver,
     {
-      provide: DataService,
-      useClass: DataServiceBrowser
+      provide: SUBDOMAIN,
+      useValue: '',
+      deps: [],
     },
-    {
-      provide: APP_INITIALIZER,
-      deps: [DataService],
-      useFactory: (ds: DataService) => async () => await ds.load(),
-      multi: true
-    }
-  ]
+  ],
 };

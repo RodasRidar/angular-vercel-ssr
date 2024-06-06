@@ -1,0 +1,104 @@
+<!-- eslint-disable prettier/prettier -->
+<nav class="bg-white border-gray-200 shadow-md sticky top-0 w-full z-10">
+  <div
+    class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <!-- burger button  -->
+    <div
+      class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse bg-[#F0F2F5] rounded-full">
+      <button
+        data-collapse-toggle="navbar-cta"
+        type="button"
+        id="triggerEl"
+        class="inline-flex items-center p-2 w-[35px] h-[35px] justify-center text-sm text-gray-500 rounded-full md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+        aria-controls="navbar-cta"
+        aria-expanded="false">
+        <span class="sr-only">Open main menu</span>
+        <svg
+          class="w-3 h-3"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 17 14">
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M1 1h15M1 7h15M1 13h15" />
+        </svg>
+      </button>
+    </div>
+    <!-- LOGO -->
+    <a
+      routerLink="/inicio"
+      class="flex items-center space-x-3 rtl:space-x-reverse">
+      @if (isLoading) {
+
+      <div class="flex items-stretch justify-between gap-3">
+        <div class="self-center">
+          <div
+            class="h-6 self-center bg-gray-200 rounded-full dark:bg-gray-700 w-36 animate-pulse"></div>
+        </div>
+      </div>
+
+      }@else {
+
+      <div class="flex items-stretch justify-between gap-3">
+        <div
+          [ngClass]="BGColor"
+          class="rounded-full h-[50px] w-[50px] flex items-center justify-center object-center max-sm:hidden">
+          <span
+            class="text-white text-3xl font-semibold whitespace-nowrap aspect-square object-center self-center p-0">
+            {{ getLogoName(businessName) }}
+          </span>
+        </div>
+
+        <div
+          [ngClass]="Color"
+          class="text-xl font-semibold self-center whitespace-nowrap max-sm:text-black">
+          {{ businessName }}
+        </div>
+      </div>
+
+      }
+    </a>
+    <!-- nav options -->
+    @if (!isLoading) {
+      <div
+      class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+      id="navbar-cta">
+      <ul
+        class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
+        @for (item of lstMenu; track item.id) {
+        <li class="text-[#525252] font-normal text-base">
+          <a
+            routerLink="{{ item.url }}"
+            class="block py-2 px-3 md:p-0"
+            routerLinkActive="font-medium text-black"
+            aria-current="page"
+            >{{ item.name }}</a
+          >
+        </li>
+        }
+      </ul>
+    </div>
+    }
+
+    <!-- btn search -->
+    <div
+      class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse"
+      [ngClass]="{ 'animate-pulse': isLoading }">
+      <button
+        type="button"
+        [ngClass]="BGColor"
+        class="rounded-full w-[30px] h-[30px] p-2 flex items-center justify-center object-center">
+        <img
+          src="./assets/icons/icon_search_white.svg"
+          class="aspect-square object-center overflow-hidden"
+          height="50"
+          width="50"
+          alt="search-icon" />
+      </button>
+    </div>
+  </div>
+</nav>

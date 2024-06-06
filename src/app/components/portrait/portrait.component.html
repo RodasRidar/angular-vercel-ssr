@@ -1,0 +1,78 @@
+<!-- eslint-disable prettier/prettier -->
+<section
+  class="flex-col overflow-hidden self-stretch relative flex aspect-[2.7083333333333335] w-full">
+  <!-- restaurantPortrait -->
+  <div [ngClass]="cartaClass" [style]="styleBlur" class="self-center w-full">
+    <img
+      [src]="
+        restaurantPortrait === ''
+          ? './assets/images/restaurant-portrait-default.webp'
+          : restaurantPortrait
+      "
+      class="object-cover object-center inset-0"
+      alt="restaurant-portrait" />
+  </div>
+  <!-- NAV Y TITULO AFTER SCROLL -->
+  <div>
+    <span
+      class="font-semibold text-xl fixed top-[40px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:hidden"
+      style="color: rgba(255, 255, 255, 0)"
+      [style]="styleFadeTitle"
+      >{{ restaurantName }}</span
+    >
+    <div class="fixed top-[20px] right-2 rounded-full m-1">
+      <button
+        type="button"
+        class="bg-red-500 rounded-full w-[35px] h-[35px] p-2 flex items-center justify-center object-center">
+        <img
+          src="./assets/icons/icon_search_white.svg"
+          class="aspect-square object-center overflow-hidden"
+          alt="search-icon" />
+      </button>
+    </div>
+  </div>
+  <!-- HAMBURGUER BUTTON  -->
+  <div
+    class="fixed top-[20px] left-2 rounded-full m-1 sm:hidden bg-[#F0F2F5] z-10">
+    <button
+      data-collapse-toggle="navbar-cta"
+      type="button"
+      class="inline-flex items-center p-2 w-[35px] h-[35px] justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+      aria-controls="navbar-cta"
+      aria-expanded="false">
+      <span class="sr-only">Open main menu</span>
+      <svg
+        class="w-3 h-3"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 17 14">
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M1 1h15M1 7h15M1 13h15" />
+      </svg>
+    </button>
+    <!-- TODO CORREGIR EL NAVBAR -->
+    <div
+      class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+      id="navbar-cta">
+      <ul
+        class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
+        @for (item of lstMenu; track item.id) {
+        <li class="text-[#525252] font-normal text-lg">
+          <a
+            routerLink="{{ item.url }}"
+            class="block py-2 px-3 md:p-0"
+            routerLinkActive="font-medium text-black"
+            aria-current="page"
+            >{{ item.name }}</a
+          >
+        </li>
+        }
+      </ul>
+    </div>
+  </div>
+</section>

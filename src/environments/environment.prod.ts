@@ -1,0 +1,5 @@
+export const environment = {
+  API_SUPABSE_URL: "https://wilrlpekxklqfgfzhgja.supabase.co",
+  SUPABASE_KEY:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpbHJscGVreGtscWZnZnpoZ2phIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkxMzQ5NTIsImV4cCI6MjAxNDcxMDk1Mn0.kWaNhiXazrAJincuSZKCdH_36xOTrAhoUyvkMEbM0qM",
+  SUPABASE_SERVICE: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpbHJscGVreGtscWZnZnpoZ2phIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY5OTEzNDk1MiwiZXhwIjoyMDE0NzEwOTUyfQ.gGr-s40lmhz_vYGsW_rhGoeoISZx_PoTd7XKCNP0O4A",
+};
