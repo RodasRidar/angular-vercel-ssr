@@ -15,13 +15,13 @@ const serverConfig: ApplicationConfig = {
     //   provide: APP_ID,
     //   useValue: 'serverApp',
     // },
-    // {
-    //   provide: SUBDOMAIN,
-    //   useFactory: (subdomain: string) => {
-    //     return subdomain!.split('.')[0];;
-    //   },
-    //   deps: [REQUEST_SUBDOMAIN],
-    // },
+    {
+      provide: SUBDOMAIN,
+      useFactory: (subdomain: string) => {
+        return subdomain!.split('.')[0];;
+      },
+      deps: [REQUEST_SUBDOMAIN],
+    },
     // {
     //   provide: APP_BASE_HREF,
     //   useValue: '/',
