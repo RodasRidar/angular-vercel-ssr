@@ -15,6 +15,7 @@ import { ClientService } from '../../services/client.service';
 import { SystemConfigurationService } from '../../services/system-configuration.service';
 import { SeoService } from '../../services/seo.service';
 import { Request } from 'express';
+import { HomeView } from '../../services/client.resolver';
 
 @Component({
   selector: 'app-home',
@@ -34,9 +35,7 @@ export class HomeComponent implements OnInit {
   title = 'Inicio';
   //Inyecciones
   seo = inject(SeoService);
-  clientService = inject(ClientService);
-  router = inject(Router);
-  sistemConfigurationService = inject(SystemConfigurationService);
+
   //Variables
   lstProductsOnHomePage: Product[] = [];
   isLoading = signal<boolean>(false);
@@ -71,119 +70,25 @@ export class HomeComponent implements OnInit {
   imagePortrait = signal<string>('');
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private route: ActivatedRoute,) {
-    console.log(this.businessSlug);
+    const view : HomeView = this.route.snapshot.data["homeViewResolver"];
+    
+    this.businessSlug = view.businessSlug;
+    this.lstProductsOnHomePage = view.lstProductsOnHomePage;
+    this.clientSignal.set(view.client);
+    this.systemConfig.set(view.systemConfig);
+    this.lstMenu.set(view.lstMenu);
+    this.imagePortrait.set(view.imagePortrait);
+
   }
 
   ngOnInit(): void {
-
-    this.businessSlug = this.route.snapshot.data["businessSlug"];
-
-    forkJoin([this.getClientAndLocations(), this.getSystemConfigAndMenu()]).subscribe(
-      ([clientAndLocations, systemConfig]) => {
-        const [products, client, locations] = clientAndLocations;
-
-        // console.log(products);
-
-        this.clientSignal.set(client[0]);
-        // console.log(client);
-
-        this.imagePortrait.set(locations[0].imagePortrait ?? '');
-        // console.log(locations);
-
-        this.lstProductsOnHomePage = products;
-
-        // Finaliza el estado de loading
-        this.isLoading.set(false);
-      },
-      error => {
-        console.error('Error en una de las peticiones', error);
-        this.isLoading.set(false);
-      });
-
+    console.log('cliente:', this.clientSignal());
     this.seo.title.setTitle(this.clientSignal().companyName ?? '');
     this.seo.meta.updateTag({ name: "description", content: `Estamos probando SSR, esta una pagina de ${this.businessSlug}` });
     this.seo.setCanonicalURL(`www.${this.businessSlug}.fodi.app`);
     this.seo.setIndexFollow(true);
   }
 
-
-  getClientAndLocations = () => {
-    return this.clientService.getClientIdByBusinessSlug(this.businessSlug).pipe(
-      mergeMap((res: any[]) => {
-        console.log(res);
-
-        if (res) {
-          const clientId = res[0].id_client;
-
-          const getClient$ = this.clientService.getClientByClientId(clientId);
-          const getLocation$ = this.clientService.getLocationByClientId(clientId);
-
-          return forkJoin([getClient$, getLocation$]);
-        } else {
-          this.router.navigateByUrl('https://fodi.app/negocio-no-existente');
-          return of([] as any);
-        }
-      }),
-      mergeMap(([client, locations]: [any, any]) => {
-        if (client.length > 0 && locations.length > 0) {
-          const catalogId = locations[0].cartalog_id;
-
-          const getSections$ = this.clientService.getSectionsByCatalogId(catalogId);
-          const getProducts$ = getSections$.pipe(
-            mergeMap(sections => {
-              // console.log(sections);
-              const sectionId = sections[0].id;
-              return this.clientService.getProductsBySectionId(sectionId);
-            })
-          );
-
-          return forkJoin([getProducts$, of(client), of(locations)]);
-        } else {
-          return of([] as any);
-        }
-      })
-    );
-  };
-
-  getSystemConfigAndMenu = () => {
-    return this.clientService.getSystemConfigByBusinessSlug(this.businessSlug).pipe(
-      mergeMap(systemConfig => {
-        this.systemConfig.set(systemConfig[0]);
-        this.sistemConfigurationService.setSystemConfiguration(systemConfig[0]);
-
-        const menu = [
-          {
-            id: 1,
-            name: 'Inicio',
-            url: `/inicio`,
-          },
-          {
-            id: 2,
-            name: this.geNameFromCatalogName(systemConfig[0].catalogName ?? ''),
-            url: `/${systemConfig[0].catalogName}` ?? '',
-          },
-          // Otros elementos de menú...
-        ];
-
-        this.lstMenu.set(menu);
-
-        return of(systemConfig);
-      })
-    );
-  };
-
-  geNameFromCatalogName(name: string) {
-    switch (name) {
-      case 'catalogo':
-        return 'Catálogo';
-      case 'carta':
-        return 'La Carta';
-      case 'productos':
-        return 'Productos';
-      default:
-        return 'Productos.';
-    }
-  }
   get BackgroundImageClass() {
     const colorsList: { [key: string]: string } = {
       indigo: 'from-indigo-300 via-indigo-300',

@@ -20,7 +20,7 @@ export const routes: Routes = [
         component: HomeComponent,
         title: 'Inicio',
         resolve: {
-          businessSlug: ClientResolver,
+          homeViewResolver: ClientResolver,
         }
       },
       {
@@ -28,7 +28,7 @@ export const routes: Routes = [
         component: HomeComponent,
         title: 'Inicio',        
         resolve: {
-          businessSlug: ClientResolver,
+          homeViewResolver: ClientResolver,
         }
       },
       // {
