@@ -82,7 +82,7 @@ export class HomeComponent implements OnInit {
   
   ngOnInit(): void {
 
-    this.businessSlug = this.route.snapshot.data["businessSlug"];
+    // this.businessSlug = this.route.snapshot.data["businessSlug"];
 
     if(isPlatformServer(this.platformId)){
       forkJoin([this.getClientAndLocations(), this.getSystemConfigAndMenu()]).subscribe(
