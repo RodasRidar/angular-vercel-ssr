@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit {
 
   imagePortrait = signal<string>('');
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private route: ActivatedRoute,@Inject(SUBDOMAIN) private subdomain: string) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private route: ActivatedRoute, @Inject(SUBDOMAIN) private subdomain: string) {
     console.log(this.businessSlug);
     if (isPlatformServer(this.platformId)) {
       this.businessSlug = this.subdomain;
@@ -79,34 +79,33 @@ export class HomeComponent implements OnInit {
       this.businessSlug = window.location.hostname.split('.')[0];
     }
   }
-  
+
   ngOnInit(): void {
 
     // this.businessSlug = this.route.snapshot.data["businessSlug"];
 
-    if(isPlatformServer(this.platformId)){
-      forkJoin([this.getClientAndLocations(), this.getSystemConfigAndMenu()]).subscribe(
-        ([clientAndLocations, systemConfig]) => {
-          const [products, client, locations] = clientAndLocations;
-  
-          // console.log(products);
-  
-          this.clientSignal.set(client[0]);
-          // console.log(client);
-  
-          this.imagePortrait.set(locations[0].imagePortrait ?? '');
-          // console.log(locations);
-  
-          this.lstProductsOnHomePage = products;
-  
-          // Finaliza el estado de loading
-          this.isLoading.set(false);
-        },
-        error => {
-          console.error('Error en una de las peticiones', error);
-          this.isLoading.set(false);
-        });
-    }
+
+    forkJoin([this.getClientAndLocations(), this.getSystemConfigAndMenu()]).subscribe(
+      ([clientAndLocations, systemConfig]) => {
+        const [products, client, locations] = clientAndLocations;
+
+        // console.log(products);
+
+        this.clientSignal.set(client[0]);
+        // console.log(client);
+
+        this.imagePortrait.set(locations[0].imagePortrait ?? '');
+        // console.log(locations);
+
+        this.lstProductsOnHomePage = products;
+
+        // Finaliza el estado de loading
+        this.isLoading.set(false);
+      },
+      error => {
+        console.error('Error en una de las peticiones', error);
+        this.isLoading.set(false);
+      });
 
     this.seo.title.setTitle(this.clientSignal().companyName ?? '');
     this.seo.meta.updateTag({ name: "description", content: `Estamos probando SSR, esta una pagina de ${this.businessSlug}` });
