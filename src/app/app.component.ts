@@ -16,20 +16,20 @@ export class AppComponent {
   tenant = '';
 
   constructor(
-    @Inject(SUBDOMAIN) private subdomain: string, 
-    @Inject(PLATFORM_ID) private platformId: any
+    // @Inject(SUBDOMAIN) private subdomain: string, 
+    // @Inject(PLATFORM_ID) private platformId: any
   ) {
     afterNextRender(() => {
       initFlowbite();
     })
     
-    if (isPlatformServer(this.platformId)) {
-      this.tenant = this.subdomain;
-      console.log(`Subdomain from server: ${this.subdomain}`);
-    }
-    else {
-      this.tenant = window.location.hostname.split('.')[0];
-      console.log(`Subdomain from client: ${this.subdomain}`);
-    }
+    // if (isPlatformServer(this.platformId)) {
+    //   this.tenant = this.subdomain;
+    //   console.log(`Subdomain from server: ${this.subdomain}`);
+    // }
+    // else {
+    //   this.tenant = window.location.hostname.split('.')[0];
+    //   console.log(`Subdomain from client: ${this.subdomain}`);
+    // }
   }
 }
