@@ -1,6 +1,6 @@
 import { Inject, Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { Resolve, Router } from '@angular/router';
-import { forkJoin, mergeMap, of } from 'rxjs';
+import { Observable, forkJoin, mergeMap, of } from 'rxjs';
 import { isPlatformServer } from '@angular/common';
 import { SUBDOMAIN } from '../../subdomain.token';
 import { Interface } from 'readline';
@@ -31,22 +31,20 @@ export class ClientResolver implements Resolve<HomeView> {
         this.homeView.businessSlug = window.location.hostname.split('.')[0];
       }
 
-      forkJoin([this.getClientAndLocations(), this.getSystemConfigAndMenu()]).subscribe(
-        ([clientAndLocations, systemConfig]) => {
+    }
+
+    resolve(): Observable<HomeView> {
+      return forkJoin([this.getClientAndLocations(), this.getSystemConfigAndMenu()]).pipe(
+        mergeMap(([clientAndLocations, systemConfig]) => {
           const [products, client, locations] = clientAndLocations;
-          this.homeView.client =client[0];
+          this.homeView.client = client[0];
           this.homeView.imagePortrait = locations[0].imagePortrait ?? '';
           this.homeView.lstProductsOnHomePage = products;
-        },
-        error => {
-          console.error('Error en una de las peticiones', error);
-        });
-
+          return of(this.homeView);
+        })
+      );
     }
-
-    resolve(): any {
-        return of(this.homeView);
-    }
+  
 
     getClientAndLocations = () => {
       return this.clientService.getClientIdByBusinessSlug(this.homeView.businessSlug).pipe(

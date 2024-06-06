@@ -70,8 +70,14 @@ export class HomeComponent implements OnInit {
   imagePortrait = signal<string>('');
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private route: ActivatedRoute,) {
+
+  }
+
+  ngOnInit(): void {
+
     const view : HomeView = this.route.snapshot.data["homeViewResolver"];
-    
+    console.log(view);
+
     this.businessSlug = view.businessSlug;
     this.lstProductsOnHomePage = view.lstProductsOnHomePage;
     this.clientSignal.set(view.client);
@@ -79,9 +85,6 @@ export class HomeComponent implements OnInit {
     this.lstMenu.set(view.lstMenu);
     this.imagePortrait.set(view.imagePortrait);
 
-  }
-
-  ngOnInit(): void {
     console.log('cliente:', this.clientSignal());
     this.seo.title.setTitle(this.clientSignal().companyName ?? '');
     this.seo.meta.updateTag({ name: "description", content: `Estamos probando SSR, esta una pagina de ${this.businessSlug}` });
