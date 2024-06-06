@@ -70,16 +70,16 @@ export class HomeComponent implements OnInit {
 
   imagePortrait = signal<string>('');
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private route: ActivatedRoute, 
-  @Inject(SUBDOMAIN) private subdomain: string) {
-    console.log(this.businessSlug);
-    // if (isPlatformServer(this.platformId)) {
-      this.businessSlug = this.subdomain;
-
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private route: ActivatedRoute, @Inject(SUBDOMAIN) private subdomain: string) {
   }
 
   ngOnInit(): void {
-
+    if (isPlatformServer(this.platformId)) {
+      this.businessSlug = this.subdomain;
+    }
+    else {
+      this.businessSlug = window.location.hostname.split('.')[0];
+    }
     // this.businessSlug = this.route.snapshot.data["businessSlug"];
 
 
