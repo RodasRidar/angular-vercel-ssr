@@ -82,8 +82,6 @@ export class HomeComponent implements OnInit {
     else {
       this.businessSlug = window.location.hostname.split('.')[0];
     }
-    // this.businessSlug = 'fodi';
-
 
     forkJoin([this.getClientAndLocations(), this.getSystemConfigAndMenu()]).subscribe(
       ([clientAndLocations, systemConfig]) => {
@@ -103,6 +101,7 @@ export class HomeComponent implements OnInit {
         this.isLoading.set(false);
       },
       error => {
+        this.router.navigateByUrl('https://fodi.app/negocio-no-existente');
         console.error('Error en una de las peticiones', error);
         this.isLoading.set(false);
       });
