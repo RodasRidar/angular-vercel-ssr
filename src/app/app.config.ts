@@ -12,7 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     provideHttpClient(withInterceptorsFromDi(),withFetch()),
-    // provideClientHydration(),
+    provideClientHydration(),
     // ClientResolver,
     {
       provide: SUBDOMAIN,
