@@ -14,10 +14,10 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi(),withFetch()),
     provideClientHydration(),
     // ClientResolver,
-    {
-      provide: SUBDOMAIN,
-      useValue: '',
-      deps: [],
-    },
+    // {
+    //   provide: SUBDOMAIN,
+    //   useValue: '',
+    //   deps: [],
+    // },
   ],
 };
