@@ -71,18 +71,19 @@ export class HomeComponent implements OnInit {
   imagePortrait = signal<string>('');
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object, private route: ActivatedRoute, @Inject(SUBDOMAIN) private subdomain: string
+    @Inject(PLATFORM_ID) private platformId: Object, private route: ActivatedRoute, @Inject(SUBDOMAIN) private subdomain: string,
   ) {
   }
 
   ngOnInit(): void {
-    if (isPlatformServer(this.platformId)) {
-      this.businessSlug = this.subdomain;
-    }
-    else {
-      this.businessSlug = window.location.hostname.split('.')[0];
-    }
+    // if (isPlatformServer(this.platformId)) {
+    //   this.businessSlug = this.subdomain;
+    // }
+    // else {
+    //   this.businessSlug = window.location.hostname.split('.')[0];
+    // }
 
+    this.businessSlug = 'fodi'
     forkJoin([this.getClientAndLocations(), this.getSystemConfigAndMenu()]).subscribe(
       ([clientAndLocations, systemConfig]) => {
         const [products, client, locations] = clientAndLocations;
@@ -91,6 +92,7 @@ export class HomeComponent implements OnInit {
 
         this.clientSignal.set(client[0]);
         // console.log(client);
+        this.clientService.setClient(client[0]);
 
         this.imagePortrait.set(locations[0].imagePortrait ?? '');
         // console.log(locations);
@@ -155,6 +157,10 @@ export class HomeComponent implements OnInit {
     return this.clientService.getSystemConfigByBusinessSlug(this.businessSlug).pipe(
       mergeMap(systemConfig => {
         this.systemConfig.set(systemConfig[0]);
+        this.systemConfig.update((config) => {
+          config.businessColor = 'red';
+          return config;
+        })
         this.sistemConfigurationService.setSystemConfiguration(systemConfig[0]);
 
         const menu = [
@@ -170,7 +176,7 @@ export class HomeComponent implements OnInit {
           },
           // Otros elementos de menú...
         ];
-
+        this.sistemConfigurationService.setNavBarItem(menu);
         this.lstMenu.set(menu);
 
         return of(systemConfig);

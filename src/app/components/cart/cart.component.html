@@ -1,0 +1,133 @@
+<div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-30"
+  [ngClass]="{'hidden': state === 'inactive'}"></div>
+<div [@fadeInOut]="state" class="fixed inset-0 overflow-hidden z-30">
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+      <div class="pointer-events-auto w-screen max-w-md">
+        <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+          <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+
+            @if(shoppingCart.totalItems > 0) {
+            <div class="flex items-start justify-between">
+              <h2 class="text-lg font-medium text-gray-900">Carrito de compras</h2>
+              <div class="ml-3 flex h-7 items-center">
+                <button type="button" class="relative text-gray-400 hover:text-gray-500" (click)="toggle()">
+                  <span class="absolute inset-0.5"></span>
+                  <span class="sr-only">Close panel</span>
+                  <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="mt-8">
+              <div class="flow-root">
+                <ul role="list" class="-my-6 divide-y divide-gray-200">
+                  @for (item of shoppingCart.items; track $index) {
+                  <li class="flex py-6">
+                    <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                      <img 
+                      [ngSrc]="
+                        item.product.imageUrl === ''
+                          ? './assets/images/product-default-image.jpeg'
+                          : item.product.imageUrl!
+                      "
+                       [alt]="item.product.name"
+                       height="94" width="94" 
+                        class="h-full w-full object-cover object-center" />
+                    </div>
+
+                    <div class="ml-4 flex flex-1 flex-col">
+                      <div>
+                        <div class="flex justify-between text-base font-medium text-gray-900">
+                          <h3>
+                            <a [routerLink]="['/productos',item.product.id]" routerLinkActive="router-link-active">
+                              {{ item.product.name.trim() }}
+                            </a>
+                          </h3>
+                          @if (item.product.is_on_sale && item.product.discountPercentage) {
+                          <!-- precio con descuento -->
+                          <p class="ml-4">
+                            {{
+                            item.product.price | discount : item.product.discountPercentage | currency : "S/ "
+                            }}
+                          </p>
+
+                          } @else {
+                          <!-- Cuando no hay descuento -->
+                          <p class="ml-4">{{ item.product.price | currency : "S/ " }}</p>
+                          }
+                        </div>
+                      </div>
+                      <div class="flex flex-1 items-end justify-between text-sm">
+
+                        <app-product-quantity [predeterminedQuantity]="item.quantity"
+                          (quantityValue)="quantityValue($event, item)" />
+
+                        <div class="flex">
+                          <button (click)="deleteItemFromCart(item)" type="button" class="font-medium"
+                            [ngClass]="[TextColorClass,TextHoverClass]">
+                            Eliminar
+                          </button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  }
+                </ul>
+              </div>
+            </div>
+            }
+            @else {
+            <div class="flex items-start justify-between">
+              <h2 class="text-lg font-medium text-gray-900"></h2>
+              <div class="ml-3 flex h-7 items-center">
+                <button type="button" class="relative text-gray-400 hover:text-gray-500" (click)="toggle()">
+                  <span class="absolute inset-0.5"></span>
+                  <span class="sr-only">Close panel</span>
+                  <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="flex flex-col gap-5 h-full justify-center items-center">
+              <img src="./assets/icons/icon_shopping-cart-2-fill-white.svg"
+                class="aspect-square object-center overflow-hidden" height="64" width="64" alt="cart-icon" />
+              <p class="font-medium">Tu carro está vacío</p>
+            </div>
+            }
+
+          </div>
+
+          <div class="border-t border-gray-200 px-2 py-6 sm:px-6">
+            @if(shoppingCart.totalItems > 0) {
+            <div class="flex justify-between text-base font-medium text-gray-900">
+              <p>Subtotal ({{shoppingCart.totalItems}})</p>
+              <p>{{ shoppingCart.subTotal | currency : "S/ " }}</p>
+            </div>
+            <!-- <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p> -->
+            <div class="mt-6 flex flex-row gap-2">
+              <!-- <a href="#" class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">
+                  Ir al carro
+                </a> -->
+              <app-button class="w-[30%]" name="Cerrar" type="secondary" (click)="toggle()"></app-button>
+              <app-button [routerLink]="['/bolsa']" (click)="toggle()"  class="w-[70%]" name="Ir al carro  &rarr;"></app-button>
+
+            </div>
+            }
+            @else {
+            <app-button class="w-[30%]" name="Cerrar" (click)="toggle()"></app-button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

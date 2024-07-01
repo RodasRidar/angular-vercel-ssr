@@ -88,11 +88,7 @@
 
 <!-- DESKTOP -->
 <div class="max-sm:hidden">
-  <app-navbar
-    [businessName]="clientSignal().companyName ?? ''"
-    [BusinessColor]="systemConfig().businessColor"
-    [lstMenu]="lstMenu()"
-    [isLoading]="isLoading()" />
+  <app-navbar />
 
   <div class="bg-white flex flex-col">
     <!-- MENU DE SECCION -->

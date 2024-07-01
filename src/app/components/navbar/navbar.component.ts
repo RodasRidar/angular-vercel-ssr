@@ -5,21 +5,46 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TailwindColor } from '../../model/color.type';
 import { NavBarItem } from '../../model/nav.interface';
 import { Collapse } from 'flowbite';
+import { CartComponent } from '../cart/cart.component';
+import { ShoppingCartService } from '../../services/shopping-cart.service';
+import { SystemConfigurationService } from '../../services/system-configuration.service';
+import { ClientService } from '../../services/client.service';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, PortraitComponent, RouterLink, RouterLinkActive],
+  imports: [CommonModule, PortraitComponent, RouterLink, RouterLinkActive,CartComponent],
   templateUrl: './navbar.component.html',
+  animations: [
+    trigger('cartAnimation', [
+      state('start', style({ transform: 'scale(1)' })),
+      state('end', style({ transform: 'scale(1.2)' })),
+      transition('start => end', [
+        animate('0.5s ease')
+      ]),
+      transition('end => start', [
+        animate('0.5s ease')
+      ])
+      
+    ])
+  ]
 })
 export class NavbarComponent {
-  @Input() businessName = '';
-  @Input() BusinessColor: TailwindColor = 'pink';
-  @Input() BusinessLogo: string = '';
-  @Input() lstMenu: NavBarItem[] = [];
-  @Input() isLoading: boolean = false;
-  constructor() {
+  @Input() isCheckout: boolean = false;
+
+  businessName = '';
+  BusinessColor: TailwindColor = 'pink';
+  BusinessLogo: string = '';
+  lstMenu: NavBarItem[] = [];
+  isLoading: boolean = false;
+  showCart = 'inactivate'
+  numItemsCart = 0
+  cartState = 'start';
+  constructor(private readonly shoppingCartService: ShoppingCartService,
+    private readonly systemConfiguration: SystemConfigurationService,
+    private readonly clientService: ClientService) {
     afterNextRender(() => {
       const $targetEl: HTMLElement = document.getElementById(
         'navbar-cta'
@@ -32,6 +57,35 @@ export class NavbarComponent {
   
       const collapse = new Collapse($targetEl, $triggerEl);
       collapse.collapse();
+    })
+  }
+  ngOnInit(): void {
+    this.shoppingCartService.shoppingCart$.subscribe(shoppingCart => {
+
+      this.numItemsCart = this.shoppingCartService.getTotalItemsByShoppingCart(shoppingCart);
+      this.cartState = this.cartState === 'start' ? 'end' : 'start';
+      setTimeout(() => {
+        this.cartState = 'start';
+      }, 500); 
+    })
+
+    this.systemConfiguration.getSystemConfiguration().subscribe(config => {
+      if (config) {
+        this.BusinessColor = config.businessColor;
+        this.BusinessLogo = config.businessLogo??'';
+        this.isLoading = false;
+      }
+    })
+    this.clientService.getClient().subscribe(client => {
+      if (client) {
+        this.businessName = client.companyName ?? '';
+
+      }
+    })
+    this.systemConfiguration.getNavBarItem().subscribe(navBarItems => {
+      if (navBarItems) {
+        this.lstMenu = navBarItems;
+      }
     })
   }
   get Color() {
@@ -85,5 +139,8 @@ export class NavbarComponent {
       .toUpperCase()}`;
 
     return iniciales;
+  }
+  verCarrito(){
+    this.shoppingCartService.toggleCart();
   }
 }

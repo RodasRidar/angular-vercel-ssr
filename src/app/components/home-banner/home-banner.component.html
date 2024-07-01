@@ -25,8 +25,8 @@
 <div class="items-center justify-center flex">
   <div [ngClass]="BackgroundImageClass"
     class="flex items-center justify-center h-[350px] w-screen lg:bg-gradient-to-b from-10% via-10% to-white to-90% max-lg:h-fit">
-    <img [src]=" businessPortrait || './assets/images/restaurant-portrait-default.webp'" alt="restaurant-portrait"
-      class="p-0 object-cover object-center borde sm:h-fit lg:rounded-b-[10px] lg:h-[350px] max-md:max-w-full" />
+    <img [ngSrc]=" businessPortrait || './assets/images/restaurant-portrait-default.webp'" alt="business-portrait"
+     priority  class="p-0 object-cover object-center borde sm:h-fit lg:rounded-b-[10px] lg:h-[350px] max-md:max-w-full" height="400" width="768"/>
   </div>
 </div>
 }

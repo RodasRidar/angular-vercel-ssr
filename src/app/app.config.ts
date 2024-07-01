@@ -6,6 +6,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { ClientResolver } from './services/client.resolver';
 import { SUBDOMAIN } from '../subdomain.token';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +14,7 @@ export const appConfig: ApplicationConfig = {
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     provideHttpClient(withInterceptorsFromDi(),withFetch()),
     provideClientHydration(),
+    provideAnimations(),
     // ClientResolver,
     {
       provide: SUBDOMAIN,

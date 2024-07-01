@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { CatalogoComponent } from './pages/catalogo/catalogo.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { SpinnerComponent } from './components/spinner/spinner.component';
-import { ClientResolver } from './services/client.resolver';
+import { ProductOverviewComponent } from './pages/product-overview/product-overview.component';
+import { BolsaComponent } from './pages/bolsa/bolsa.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
 
 export const routes: Routes = [
   // { path: ':businessSlug', component: HomeComponent },
@@ -26,11 +26,11 @@ export const routes: Routes = [
       {
         path: 'inicio',
         component: HomeComponent,
-        title: 'Inicio',        
+        title: 'Inicio',
         // resolve: {
         //   businessSlug: ClientResolver,
         // }
-      },
+      }
       // {
       //   path: 'productos',
       //   component: CatalogoComponent,
@@ -48,6 +48,21 @@ export const routes: Routes = [
       // },
     ],
     title: 'Inicio',
+  },
+  {
+    path: 'productos/:idSEO',
+    component: ProductOverviewComponent,
+    title: 'Producto',
+  },
+  {
+    path: 'bolsa',
+    component: BolsaComponent,
+    title: 'Bolsa',
+  },
+  {
+    path: 'checkout',
+    component: CheckoutComponent,
+    title: 'Confirmar Orden',
   },
   {
     path: 'negocio-no-existente',

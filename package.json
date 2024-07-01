@@ -9,7 +9,6 @@
     "test": "ng test",
     "serve:ssr:angular-vercel-ssr": "node dist/angular-vercel-ssr/server/server.mjs",
     "start:ssr": "ng run fodi-app-ssr --host=fodi.fodi.test --port=4200"
-
   },
   "private": true,
   "dependencies": {
@@ -25,6 +24,7 @@
     "@angular/ssr": "^17.2.2",
     "express": "^4.18.2",
     "flowbite": "^2.3.0",
+    "ngx-cookie-service": "^17.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"

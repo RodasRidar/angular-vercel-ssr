@@ -7,6 +7,7 @@ import { Section } from '../model/section.interfaces';
 
 import { Client } from '../model/client.interface';
 import { environment } from '../../environments/environment.development';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 const BASE_URL = environment.API_SUPABSE_URL;
 const TABLE = 'clients';
@@ -53,5 +54,15 @@ export class ClientService {
     return this.http.get<Product[]>(
       `${BASE_URL}/rest/v1/products?section_id=eq.${sectionId}&select=*`
     );
+  }
+
+  private ClientSubjetct: BehaviorSubject<Client | null> = new BehaviorSubject<Client | null>(null);
+
+  setClient(reg: Client | null): void {
+    this.ClientSubjetct.next(reg);
+  }
+
+  getClient(): Observable<Client | null> {
+    return this.ClientSubjetct.asObservable();
   }
 }
